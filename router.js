@@ -1,5 +1,6 @@
 const express = require('express');
 const pagesController = require('./controllers/pages-controller');
+const loginController = require('./controllers/login-controller');
 const router = express.Router();
 
 router.get('/', pagesController.getIndexPage)
@@ -17,5 +18,8 @@ router.get('/', pagesController.getIndexPage)
       .get('/admin/profile.html', pagesController.getAdminProfilePage)
       .get('/admin/login.html', pagesController.getAdminLoginPage)
       .get('/admin/password-reset.html', pagesController.getAdminPwdResetPage)
+
+      //deal with the login process
+      .post('/userLogin', loginController.userLogin)
 
 module.exports = router;
