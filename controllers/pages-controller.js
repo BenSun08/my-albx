@@ -1,4 +1,4 @@
-const querystring = require('querystring');
+const postsModel = require('../models/posts-model');
 
 module.exports={
     /**
@@ -28,7 +28,22 @@ module.exports={
      },
 
      getAdminPostsPage(req,rsp){
-         rsp.render('admin/posts');
+        postsModel.getAllPosts((err,results)=>{
+            if(err){
+                console.log(err);
+            }else{
+                results.forEach(element=>{
+                    if(element.status == 'published'){
+                        element.status='已发布';
+                    }else if(element.status == 'drafted'){
+                        element.status='未发布';
+                    };
+                    element.created = postsModel.getFormattedDate(element.created);
+                })
+                console.log(results);
+                rsp.render('admin/posts',{postsInfo: results});
+            }
+        })
      },
 
      getAdminPostAddPage(req,rsp){

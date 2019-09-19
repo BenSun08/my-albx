@@ -25,7 +25,7 @@ app.use(session({
 }));
 //validate the login status
 app.use((req,rsp,next)=>{
-    console.log(req.session);
+    // console.log(req.session);
     if((req.session.isLogin && req.session.isLogin == 'yes') || 
     !/admin/.test(req.url) || req.url == '/admin/login'){
         next();
