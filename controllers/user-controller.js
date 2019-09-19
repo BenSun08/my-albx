@@ -1,4 +1,4 @@
-const loginModel = require('../models/login-model');
+const loginModel = require('../models/user-model');
 
 module.exports={
     /**
@@ -21,6 +21,7 @@ module.exports={
                     })
                 }else{
                     if(password == result.password){
+                        req.session.isLogin = 'yes';
                         rsp.send({
                             code:200,
                             msg:'You login successfully!'
@@ -33,6 +34,18 @@ module.exports={
                     }
                 }
             }
+        })
+    },
+
+    /**
+     * @api {GET} log out the user
+     * @apiName userLogout
+     */
+    userLogout(req,rsp){
+        req.session.isLogin='no';
+        rsp.send({
+            code:200,
+            msg:'Logout successfully!'
         })
     }
 }

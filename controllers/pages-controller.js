@@ -1,3 +1,4 @@
+const querystring = require('querystring');
 
 module.exports={
     /**
@@ -23,7 +24,7 @@ module.exports={
      },
 
      getAdminIndexPage(req,rsp){
-         rsp.render('admin/index');
+        rsp.render('admin/index');
      },
 
      getAdminPostsPage(req,rsp){

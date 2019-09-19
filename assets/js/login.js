@@ -7,8 +7,10 @@ $(function () {
             success: function (rspRes) {
                 if(rspRes.code == 200){
                     console.log(rspRes.msg);
+                    location.href = './index'
                 }else{
                     console.log(rspRes.msg);
+                    alert(rspRes.msg);
                 }
             }
         })

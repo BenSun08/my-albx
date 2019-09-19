@@ -1,25 +1,25 @@
 const express = require('express');
 const pagesController = require('./controllers/pages-controller');
-const loginController = require('./controllers/login-controller');
+const userController = require('./controllers/user-controller');
 const router = express.Router();
 
 router.get('/', pagesController.getIndexPage)
       .get('/list',pagesController.getListPage)
       .get('/detail',pagesController.getDetailPage)
-      .get('/admin/categories.html',pagesController.getAdminCategoriesPage)
-      .get('/admin/index.html', pagesController.getAdminIndexPage)
-      .get('/admin/posts.html', pagesController.getAdminPostsPage)
-      .get('/admin/post-add.html', pagesController.getAdminPostAddPage)
-      .get('/admin/comments.html', pagesController.getAdminCommentsPage)
-      .get('/admin/users.html', pagesController.getAdminUsersPage)
-      .get('/admin/nav-menus.html', pagesController.getAdminNavMenusPage)
-      .get('/admin/slides.html', pagesController.getAdminSlidesPage)
-      .get('/admin/settings.html', pagesController.getAdminSettingsPage)
-      .get('/admin/profile.html', pagesController.getAdminProfilePage)
-      .get('/admin/login.html', pagesController.getAdminLoginPage)
-      .get('/admin/password-reset.html', pagesController.getAdminPwdResetPage)
+      .get('/admin/categories',pagesController.getAdminCategoriesPage)
+      .get('/admin/index', pagesController.getAdminIndexPage)
+      .get('/admin/posts', pagesController.getAdminPostsPage)
+      .get('/admin/post-add', pagesController.getAdminPostAddPage)
+      .get('/admin/comments', pagesController.getAdminCommentsPage)
+      .get('/admin/users', pagesController.getAdminUsersPage)
+      .get('/admin/nav-menus', pagesController.getAdminNavMenusPage)
+      .get('/admin/slides', pagesController.getAdminSlidesPage)
+      .get('/admin/settings', pagesController.getAdminSettingsPage)
+      .get('/admin/profile', pagesController.getAdminProfilePage)
+      .get('/admin/login', pagesController.getAdminLoginPage)
+      .get('/admin/password-reset', pagesController.getAdminPwdResetPage)
 
       //deal with the login process
-      .post('/userLogin', loginController.userLogin)
-
+      .post('/userLogin', userController.userLogin)
+      .get('/userLogout', userController.userLogout)
 module.exports = router;
