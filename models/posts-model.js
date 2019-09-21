@@ -13,29 +13,30 @@ module.exports={
      * @api get all the posts in the database
      * @apiName getAllPosts
      * @param {Function} callback
+     * @param {Object} options
      */
-    getAllPosts(callback){
-        let dml=`SELECT title,nickname AS author,\`name\` AS category,created,posts.\`status\` FROM posts,users,categories WHERE posts.user_id=users.id AND posts.category_id=categories.id;`
+    getAllPosts(options, callback){
+        let  dml = `SELECT title,nickname AS author, \`name\` AS category,created,posts.\`status\` FROM posts 
+                JOIN users ON posts.user_id = users.id
+                JOIN categories ON posts.category_id = categories.id
+                LIMIT ${options.pageIndex-1},${options.pageSize};`
         connection.query(dml,(err,results)=>{
             if(err){
                 callback(err)
             }else{
-                callback(null,results);
+                let count_dml = `SELECT COUNT(id) AS postsNum FROM posts;`;
+                connection.query(count_dml,(count_err, count_res)=>{
+                    if(count_err){
+                        console.log(count_err);
+                    }else{
+                        let combRes = {
+                            results,
+                            count:count_res[0].postsNum
+                        }
+                        callback(null,combRes);
+                    }
+                })
             }
         })
     },
-
-    /**
-     * @api get the formatted date string
-     * @apiName getFormattedDate
-     * @param {Date} createdDate 
-     */
-    getFormattedDate(createdDate){
-        let year = createdDate.getFullYear();
-        let month = createdDate.getMonth()+1;
-        let date = createdDate.getDate();
-        month = month<10 ? '0'+month : month;
-        date = date<10 ? '0'+date : date;
-        return year+'/'+month+'/'+date;
-    }
 }
