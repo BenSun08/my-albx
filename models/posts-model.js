@@ -16,15 +16,23 @@ module.exports={
      * @param {Object} options
      */
     getAllPosts(options, callback){
-        let  dml = `SELECT title,nickname AS author, \`name\` AS category,created,posts.\`status\` FROM posts 
+        let  dml = `SELECT posts.id AS post_id,title,nickname AS author, \`name\` AS category,created,posts.\`status\` FROM posts 
                 JOIN users ON posts.user_id = users.id
                 JOIN categories ON posts.category_id = categories.id
-                LIMIT ${options.pageIndex-1},${options.pageSize};`
-        connection.query(dml,(err,results)=>{
+                WHERE 1=1 `
+        if(options.category && options.category != 'all'){
+            dml += `AND category_id=${options.category} `;
+        };
+        if(options.status && options.status != 'all'){
+            dml += `AND posts.\`status\`='${options.status}' `;
+        };
+        dml += `ORDER BY post_id ASC `;
+        let select_dml = dml + `LIMIT ${options.pageIndex-1},${options.pageSize};`
+        connection.query(select_dml,(err,results)=>{
             if(err){
                 callback(err)
             }else{
-                let count_dml = `SELECT COUNT(id) AS postsNum FROM posts;`;
+                let count_dml = `SELECT COUNT(post_id) AS postsNum FROM (${dml}) AS listed_posts`;
                 connection.query(count_dml,(count_err, count_res)=>{
                     if(count_err){
                         console.log(count_err);
@@ -39,4 +47,21 @@ module.exports={
             }
         })
     },
+
+    /**
+     * @api get all the categories from database
+     * @apiName getAllCategories
+     * @param {Function} callback
+     */
+    getAllCategories(callback){
+        let dml = `SELECT id,\`name\` FROM categories
+                ORDER BY id ASC;`
+        connection.query(dml, (err,results)=>{
+            if(err){
+                callback(err);
+            }else{
+                callback(null,results);
+            }
+        })
+    }
 }
