@@ -22,6 +22,7 @@ module.exports={
                 }else{
                     if(password == result.password){
                         req.session.isLogin = 'yes';
+                        req.session.currentUser = result;
                         rsp.send({
                             code:200,
                             msg:'You login successfully!'

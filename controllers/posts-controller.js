@@ -1,4 +1,5 @@
 const moment = require('moment');
+const formidable = require('formidable');
 const postsModel = require("../models/posts-model");
 
 module.exports = {
@@ -52,5 +53,57 @@ module.exports = {
               })
           }
       })
+  },
+
+  /**
+   * @api {POST} /uploadFigure
+   * @apiName uploadFigure
+   */
+  uploadFigure(req,rsp){
+    let form = new formidable.IncomingForm();
+    form.encoding = 'utf-8';
+    form.uploadDir = './uploads/temp';
+    form.keepExtensions = true;
+    form.parse(req,(err,fields,files)=>{
+        if(err){
+            rsp.send({
+                code: 400,
+                msg: 'Figure uploaded failed!'
+            })
+        }else{
+            let tempPath = '/'+files.figure.path.replace(/\\/g,'/');
+            rsp.send({
+                code: 200,
+                msg: 'Figure uploaded successfull!',
+                src: tempPath
+            })
+        }
+    })
+  },
+
+  /**
+   * @api {POST} /addNewPost
+   * @apiName addNewPost
+   */
+  addNewPost(req,rsp){
+    let newPost = req.body;
+    newPost.user_id = req.session.currentUser.id;
+    newPost.views = 0;
+    newPost.likes = 0;
+    postsModel.addNewPost(newPost, err=>{
+      if(err){
+        console.log(err);
+        rsp.send({
+          code: 400,
+          msg: 'New Post added failed!',
+          err: err.code
+        })
+      }else{
+        rsp.send({
+          code: 200,
+          msg: 'New post added successfully!'
+        })
+      }
+    })
   }
 };

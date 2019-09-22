@@ -16,7 +16,7 @@ module.exports={
      * @param {Function} callback
      */
     validateUser(email,callback){
-        let dml = `SELECT email,\`password\` FROM users WHERE email='${email}'`;
+        let dml = `SELECT id,email,\`password\` FROM users WHERE email='${email}'`;
         connection.query(dml,(err,results)=>{
             if(err){
                 callback(err);
