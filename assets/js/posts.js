@@ -1,5 +1,5 @@
 $(function() {
-  const pageSize = 2;
+  const pageSize = 3;
   let pageIndex = 1;
   let category = $("#categ-menu").val();
   let status = $("#status-menu").val();
@@ -19,7 +19,7 @@ $(function() {
         if (rspRes.code == 200) {
           console.log(rspRes.msg);
           let htmlStr = template("tbody-template", {
-            data: rspRes.data.results
+            posts: rspRes.data.results
           });
           $("tbody").html(htmlStr);
           let postsNum = rspRes.data.count;
@@ -74,5 +74,11 @@ $(function() {
       console.log(category,status);
       pageIndex = 1;
       loadPosts();
+  });
+
+  /* selected the post to edit and skip to the post-edit page */
+  $("tbody").on("click",".post-edit",function(){
+    let id2Edit = $(this).parents("tr").attr("data-id");
+    location.href = `post-add?id=${id2Edit}`;
   })
 });

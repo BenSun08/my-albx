@@ -29,4 +29,6 @@ router.get('/', pagesController.getIndexPage)
       .get('/getAllCategories', postsController.getAllCategories)
       .post('/uploadFigure', postsController.uploadFigure)
       .post('/addNewPost', postsController.addNewPost)
+      .get('/getPostById', postsController.getPostById)
+      .post('/editPost', postsController.editPost)
 module.exports = router;

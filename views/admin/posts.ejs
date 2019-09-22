@@ -49,8 +49,8 @@
         </thead>
         <tbody>
           <script type="text/template" id="tbody-template">
-            {{each data}}
-          <tr>
+            {{each posts}}
+          <tr data-id="{{ $value.post_id }}">
             <td class="text-center"><input type="checkbox"></td>
             <td>{{ $value.title }}</td>
             <td>{{ $value.author }}</td>
@@ -58,8 +58,8 @@
             <td class="text-center">{{ $value.created }}</td>
             <td class="text-center">{{ $value.status }}</td>
             <td class="text-center">
-              <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+              <a href="javascript:;" class="btn btn-default btn-xs post-edit">编辑</a>
+              <a href="javascript:;" class="btn btn-danger btn-xs post-delete">删除</a>
             </td>
           </tr>
           {{/each}}

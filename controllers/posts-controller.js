@@ -105,5 +105,51 @@ module.exports = {
         })
       }
     })
+  },
+
+  /**
+   * @api {GET} /getPostById
+   * @apiName getPostById
+   */
+  getPostById(req, rsp){
+    let id2Edit = req.query.id;
+    postsModel.getPostById(id2Edit, (err,post2Edit)=>{
+      if(err){
+        rsp({
+          code: 400,
+          msg: "Post loaded failed!",
+          err: err.code
+        })
+      }else{
+        post2Edit.created = moment(post2Edit.created).format('YYYY-MM-DDTHH:mm');
+        rsp.send({
+          code: 200,
+          msg: "Post loaded successfully!",
+          data: post2Edit
+        })
+      }
+    })
+  },
+
+  /**
+   * @api {POST} /editPost
+   * @apiName editPost
+   */
+  editPost(req, rsp){
+    let editedPost = req.body;
+    postsModel.editPost(editedPost, err=>{
+      if(err){
+        rsp.send({
+          code: 400,
+          msg: "Post edited failed!",
+          err: err.code
+        })
+      }else{
+        rsp.send({
+          code: 200,
+          msg: "Post edited successfully!"
+        })
+      }
+    })
   }
 };

@@ -29,7 +29,7 @@ module.exports = {
     }
     dml += `ORDER BY post_id ASC `;
     let select_dml =
-      dml + `LIMIT ${options.pageIndex - 1},${options.pageSize};`;
+      dml + `LIMIT ${(options.pageIndex - 1)*options.pageSize},${options.pageSize};`;
     connection.query(select_dml, (err, results) => {
       if (err) {
         callback(err);
@@ -80,6 +80,7 @@ module.exports = {
       if (err) {
         callback(err);
       } else {
+        newPost.id = null;
         let oldPath = '.'+newPost.feature;
         let newPath = `./uploads/figure_postID_${id_res[0]["auto_increment"]}.jpg`;
         fs.rename(oldPath, newPath, rn_err=>{
@@ -96,5 +97,39 @@ module.exports = {
         });
       }
     });
+  },
+
+  /**
+   * @api get one post by id 
+   * @apiName getPostById
+   * @param {Number} id2Edit id of the post to edit
+   * @param {Function} callback
+   */
+  getPostById(id2Edit,callback){
+      let dml = `SELECT * FROM posts WHERE id=${id2Edit}; `;
+      connection.query(dml, (err,results)=>{
+          if(err){
+              callback(err);
+          }else{
+              callback(null, results[0]);
+          }
+      })
+  },
+
+  /**
+   * @api save the edited post in database
+   * @apiName editPost
+   * @param {Object} editedPost
+   * @param {Function} callback
+   */
+  editPost(editedPost, callback){
+      let dml = `UPDATE posts SET ? WHERE id=${editedPost.id}`;
+      connection.query(dml,editedPost, err=>{
+          if(err){
+              callback(err);
+          }else{
+              callback(null);
+          }
+      })
   }
 };

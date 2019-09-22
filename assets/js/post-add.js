@@ -43,12 +43,10 @@ $(function(){
         })
     });
 
-    CKEDITOR.replace("content");
-    /* submit the new post */
-    $("#submit").on("click",function(){
-        CKEDITOR.instances.content.updateElement();
+    /* function to post the new post or edited post */
+    function postAjax(url){
         $.ajax({
-            url: '/addNewPost',
+            url,
             method: 'post',
             data: $("#post-form").serialize(),
             dataType: 'json',
@@ -63,5 +61,54 @@ $(function(){
                 }
             }
         })
-    })
+    }
+    CKEDITOR.replace("content");
+    /* submit the post (edit the existing one or add new one) */
+    $("#submit").on("click",function(){
+        CKEDITOR.instances.content.updateElement();
+        if(anatomizeSearch().id){
+            postAjax('/editPost');
+        }else{
+            postAjax('/addNewPost');
+        }
+    });
+
+    /* get the search from url to judge the user action
+        "add new post" or "edit exsisting post" */
+    function anatomizeSearch(){
+        let queryStr = location.search.substring(1);
+        let queryAttrArr = queryStr.split('&');
+        let queryObj = {};
+        queryAttrArr.forEach(element=>{
+            let keyValComb = element.split('=');
+            queryObj[keyValComb[0]] = keyValComb[1];
+        })
+        return queryObj;
+    };
+    /* if the current user action is "edit  the post"
+     get the original post from database */
+     if(anatomizeSearch().id){
+         $.ajax({
+             url: '/getPostById',
+             method: 'get',
+             dataType: 'json',
+             data: anatomizeSearch(),
+             success: function(rspRes){
+                if(rspRes.code == 200){
+                    $("#post-id").val(rspRes.data.id);
+                    $("#title").val(rspRes.data.title);
+                    $("#content").val(rspRes.data.content);
+                    $("#slug").val(rspRes.data.slug);
+                    $("input[name=feature]").val(rspRes.data.feature);
+                    $(".thumbnail").attr("src",rspRes.data.feature).show();
+                    $("#category").val(rspRes.data.category_id);
+                    $("#created").val(rspRes.data.created);
+                    $("#status").val(rspRes.data.status);
+                }else{
+                    console.log(rspRes.msg+": "+rspRes.err);
+                    alert(rspRes.msg+": "+rspRes.err);
+                }
+             }
+         })
+     }
 })
