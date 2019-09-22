@@ -151,5 +151,27 @@ module.exports = {
         })
       }
     })
+  },
+
+  /**
+   * @api {GET} /deletePost
+   * @apiName deletePost
+   */
+  deletePost(req, rsp){
+    let id2Del = req.query.id;
+    postsModel.deletePostById(id2Del, err=>{
+      if(err){
+        rsp.send({
+          code: 400,
+          msg: 'Post deleted failed!',
+          err: err.code
+        })
+      }else{
+        rsp.send({
+          code: 200,
+          msg: 'Post deleted successfully!'
+        })
+      }
+    })
   }
 };

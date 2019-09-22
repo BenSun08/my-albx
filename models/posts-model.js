@@ -29,7 +29,10 @@ module.exports = {
     }
     dml += `ORDER BY post_id ASC `;
     let select_dml =
-      dml + `LIMIT ${(options.pageIndex - 1)*options.pageSize},${options.pageSize};`;
+      dml +
+      `LIMIT ${(options.pageIndex - 1) * options.pageSize},${
+        options.pageSize
+      };`;
     connection.query(select_dml, (err, results) => {
       if (err) {
         callback(err);
@@ -81,10 +84,12 @@ module.exports = {
         callback(err);
       } else {
         newPost.id = null;
-        let oldPath = '.'+newPost.feature;
-        let newPath = `./uploads/figure_postID_${id_res[0]["auto_increment"]}.jpg`;
-        fs.rename(oldPath, newPath, rn_err=>{
-            rn_err && callback(rn_err);
+        let oldPath = "." + newPost.feature;
+        let newPath = `./uploads/figure_postID_${
+          id_res[0]["auto_increment"]
+        }.jpg`;
+        fs.rename(oldPath, newPath, rn_err => {
+          rn_err && callback(rn_err);
         });
         newPost.feature = newPath.substring(1);
         let dml = `INSERT INTO posts SET ?`;
@@ -100,20 +105,20 @@ module.exports = {
   },
 
   /**
-   * @api get one post by id 
+   * @api get one post by id
    * @apiName getPostById
    * @param {Number} id2Edit id of the post to edit
    * @param {Function} callback
    */
-  getPostById(id2Edit,callback){
-      let dml = `SELECT * FROM posts WHERE id=${id2Edit}; `;
-      connection.query(dml, (err,results)=>{
-          if(err){
-              callback(err);
-          }else{
-              callback(null, results[0]);
-          }
-      })
+  getPostById(id2Edit, callback) {
+    let dml = `SELECT * FROM posts WHERE id=${id2Edit}; `;
+    connection.query(dml, (err, results) => {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, results[0]);
+      }
+    });
   },
 
   /**
@@ -122,14 +127,44 @@ module.exports = {
    * @param {Object} editedPost
    * @param {Function} callback
    */
-  editPost(editedPost, callback){
-      let dml = `UPDATE posts SET ? WHERE id=${editedPost.id}`;
-      connection.query(dml,editedPost, err=>{
-          if(err){
-              callback(err);
-          }else{
-              callback(null);
+  editPost(editedPost, callback) {
+    let dml = `UPDATE posts SET ? WHERE id=${editedPost.id}`;
+    connection.query(dml, editedPost, err => {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null);
+      }
+    });
+  },
+
+  /**
+   * @api delete selected post by id
+   * @apiName deletePostById
+   * @param {Number} id2Del
+   * @param {Function} callback
+   */
+  deletePostById(id2Del, callback) {
+    let delFigDml = `SELECT feature FROM posts WHERE id=${id2Del};`;
+    connection.query(delFigDml, (err, results) => {
+      if (err) {
+        callback(err);
+      } else {
+        fs.unlink("." + results[0].feature, delFig_err => {
+          if (delFig_err) {
+            callback(delFig_err);
+          } else {
+            let dml = `DELETE FROM posts WHERE id=${id2Del}`;
+            connection.query(dml, delPost_err => {
+              if (delPost_err) {
+                callback(delPost_err);
+              } else {
+                callback(null);
+              }
+            });
           }
-      })
+        });
+      }
+    });
   }
 };

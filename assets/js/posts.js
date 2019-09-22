@@ -71,7 +71,6 @@ $(function() {
   $("#filter").on('click',function(){
       category = $("#categ-menu").val();
       status = $("#status-menu").val();
-      console.log(category,status);
       pageIndex = 1;
       loadPosts();
   });
@@ -80,5 +79,27 @@ $(function() {
   $("tbody").on("click",".post-edit",function(){
     let id2Edit = $(this).parents("tr").attr("data-id");
     location.href = `post-add?id=${id2Edit}`;
+  });
+
+  /* delete the selected post in the list */
+  $("tbody").on("click",".post-delete", function(){
+    let post2Del = $(this).parents("tr");
+    let id2Del = post2Del.attr("data-id");
+    $.ajax({
+      url: '/deletePost',
+      method: 'get',
+      data: {id:id2Del},
+      dataType: 'json',
+      success: function(rspRes){
+        if(rspRes.code == 200){
+          console.log(rspRes.msg);
+          post2Del.remove();
+          loadPosts();
+        }else{
+          console.log(rspRes.msg+': '+rspRes.err);
+          alert(rspRes.msg+': '+rspRes.err);
+        }
+      }
+    })
   })
 });

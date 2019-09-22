@@ -31,4 +31,5 @@ router.get('/', pagesController.getIndexPage)
       .post('/addNewPost', postsController.addNewPost)
       .get('/getPostById', postsController.getPostById)
       .post('/editPost', postsController.editPost)
+      .get('/deletePost', postsController.deletePost)
 module.exports = router;
