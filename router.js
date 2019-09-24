@@ -2,7 +2,8 @@ const express = require('express');
 const pagesController = require('./controllers/pages-controller');
 const userController = require('./controllers/user-controller');
 const postsController = require('./controllers/posts-controller');
-const categoriesController =require('./controllers/categories-controller');
+const categoriesController = require('./controllers/categories-controller');
+const commentsController = require('./controllers/comments-controller');
 const router = express.Router();
 
 router.get('/', pagesController.getIndexPage)
@@ -33,9 +34,14 @@ router.get('/', pagesController.getIndexPage)
       .post('/editPost', postsController.editPost)
       .get('/deletePost', postsController.deletePost)
 
-      // deal with categories mangagement
+      // deal with categories management
       .get('/getAllCategories', categoriesController.getAllCategories)
       .post('/addNewCategory', categoriesController.addNewCategory)
       .post('/editCategory', categoriesController.editCategory)
       .get('/deleteCategory', categoriesController.deleteCategory)
+
+      // deal with comments management
+      .get('/getAllComments', commentsController.getAllComments)
+      .get('/deleteComment', commentsController.deleteComment)
+      .post('/changeStatus', commentsController.changeStatus)
 module.exports = router;
