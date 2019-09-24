@@ -1,9 +1,12 @@
 $(function() {
-  const pageSize = 3;
+  let pageSize = 3;
   let pageIndex = 1;
   let totalPostsNum = 0;
   let category = $("#categ-menu").val();
   let status = $("#status-menu").val();
+  /* set the default page size */
+  $("#pagesize-menu").val(pageSize);
+
   /* load all the posts dynamically */
   function loadPosts() {
     $.ajax({
@@ -121,4 +124,11 @@ $(function() {
       }
     });
   });
+
+  /* when the page size change, reload the posts based on the size */
+  $("#pagesize-menu").on("change", function(){
+    pageSize = $(this).val();
+    pageIndex = 1;
+    loadPosts();
+  })
 });
