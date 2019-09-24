@@ -2,6 +2,7 @@ const express = require('express');
 const pagesController = require('./controllers/pages-controller');
 const userController = require('./controllers/user-controller');
 const postsController = require('./controllers/posts-controller');
+const categoriesController =require('./controllers/categories-controller');
 const router = express.Router();
 
 router.get('/', pagesController.getIndexPage)
@@ -26,10 +27,15 @@ router.get('/', pagesController.getIndexPage)
 
       //deal with posts
       .get('/getAllPosts', postsController.getAllPosts)
-      .get('/getAllCategories', postsController.getAllCategories)
       .post('/uploadFigure', postsController.uploadFigure)
       .post('/addNewPost', postsController.addNewPost)
       .get('/getPostById', postsController.getPostById)
       .post('/editPost', postsController.editPost)
       .get('/deletePost', postsController.deletePost)
+
+      // deal with categories mangagement
+      .get('/getAllCategories', categoriesController.getAllCategories)
+      .post('/addNewCategory', categoriesController.addNewCategory)
+      .post('/editCategory', categoriesController.editCategory)
+      .get('/deleteCategory', categoriesController.deleteCategory)
 module.exports = router;

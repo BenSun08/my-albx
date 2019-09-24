@@ -54,23 +54,6 @@ module.exports = {
   },
 
   /**
-   * @api get all the categories from database
-   * @apiName getAllCategories
-   * @param {Function} callback
-   */
-  getAllCategories(callback) {
-    let dml = `SELECT id,\`name\` FROM categories
-                ORDER BY id ASC;`;
-    connection.query(dml, (err, results) => {
-      if (err) {
-        callback(err);
-      } else {
-        callback(null, results);
-      }
-    });
-  },
-
-  /**
    * @api add new post to database
    * @apiName addNewPost
    * @param {Object} newPost  the information and content of the new post

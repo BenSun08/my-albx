@@ -35,27 +35,6 @@ module.exports = {
   },
 
   /**
-   * @api {GET} /getAllCategories
-   * @apiName getAllCategories
-   */
-  getAllCategories(req,rsp){
-      postsModel.getAllCategories((err,results)=>{
-          if(err){
-              rsp.send({
-                  code: 400,
-                  msg: 'Categories loaded failed!'
-              })
-          }else{
-              rsp.send({
-                  code: 200,
-                  msg: 'Categories loaded successfully!',
-                  data: results
-              })
-          }
-      })
-  },
-
-  /**
    * @api {POST} /uploadFigure
    * @apiName uploadFigure
    */
