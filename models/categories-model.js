@@ -68,7 +68,7 @@ module.exports = {
    * @param {Function} callback
    */
   deleteCategById(id2Del, callback){
-    let dml = `DELETE FROM categories WHERE id=${id2Del}`;
+    let dml = `DELETE FROM categories WHERE id IN (${id2Del})`;
     connection.query(dml, err=>{
       if(err){
         callback(err);

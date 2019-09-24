@@ -64,12 +64,13 @@ $(function() {
 
   /* delete the category selected */
   $("tbody").on('click', ".btn-del", function(){
+    if(!confirm("Are you sure to delete this category?")) return;
     let cate2Del = $(this).parents("tr");
     $.ajax({
         url: '/deleteCategory',
         method: 'get',
         dataType: 'json',
-        data: {id: cate2Del.data().id},
+        data: {id: cate2Del.data('id')},
         success: function(rspRes){
             if(rspRes.code == 200){
                 console.log(rspRes.msg);
@@ -80,5 +81,53 @@ $(function() {
             }
         }
     })
+  });
+
+  /* select all categories or not */
+  $(".check-all").on('click',function(){
+      $(".check-single").prop("checked",$(this).prop("checked"));
+      if($(this).prop("checked")){
+          $("#batch-del").show();
+      }else{
+          $("#batch-del").hide();
+      }
+  });
+  /* when enough number of categories seleceted, 'batch delete' appear */
+  $('tbody').on('click', '.check-single', function(){
+      let checkedLength = $('.check-single:checked').length;
+      let checkLength =$('.check-single').length;
+      if( checkedLength > 1 && checkedLength < checkLength){
+          $("#batch-del").show();
+          $(".check-all").prop("checked",false);
+      }else if(checkedLength == checkLength){
+          $("#batch-del").show();
+          $(".check-all").prop("checked",true);
+      }else{
+          $("#batch-del").hide();
+          $(".check-all").prop("checked",false);
+      };
+  });
+  /* delete the selected categories in batch */
+  $("#batch-del").on("click", function(){
+      if(!confirm("Are you sure to delete all these categories?")) return;
+      let categs2Del = [];
+      $(".check-single:checked").each((index,element)=>{
+        categs2Del.push($(element).parents("tr").data("id"));
+      });
+      $.ajax({
+          url: '/deleteCategory',
+          method: 'get',
+          data: {id: categs2Del.join(',')},
+          dataType: 'json',
+          success: function(rspRes){
+              if(rspRes.code == 200){
+                console.log(rspRes.msg);
+                loadCategories();
+              }else{
+                  console.log(rspRes.msg+": "+rspRes.err);
+                  alert(rspRes.msg+": "+rspRes.err);
+              }
+          }
+      })
   })
 });
