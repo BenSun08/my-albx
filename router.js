@@ -4,6 +4,7 @@ const userController = require('./controllers/user-controller');
 const postsController = require('./controllers/posts-controller');
 const categoriesController = require('./controllers/categories-controller');
 const commentsController = require('./controllers/comments-controller');
+const settingsController = require('./controllers/settings-controller');
 const router = express.Router();
 
 router.get('/', pagesController.getIndexPage)
@@ -48,4 +49,9 @@ router.get('/', pagesController.getIndexPage)
       .get('/getAllComments', commentsController.getAllComments)
       .get('/deleteComment', commentsController.deleteComment)
       .post('/changeStatus', commentsController.changeStatus)
+
+      // deal with settings management
+      .get('/getNavMenus', settingsController.getNavMenus)
+      .post('/addNewNav', settingsController.addNewNav)
+      .get('/deleteNav', settingsController.deleteNav)
 module.exports = router;

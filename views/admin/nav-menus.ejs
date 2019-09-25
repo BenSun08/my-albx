@@ -26,23 +26,23 @@
               <input id="title" class="form-control" name="title" type="text" placeholder="标题">
             </div>
             <div class="form-group">
-              <label for="href">链接</label>
-              <input id="href" class="form-control" name="href" type="text" placeholder="链接">
+              <label for="link">链接</label>
+              <input id="link" class="form-control" name="link" type="text" placeholder="链接">
             </div>
             <div class="form-group">
-              <button class="btn btn-primary" type="submit">添加</button>
+              <button class="btn btn-primary nav-add" type="submit">添加</button>
             </div>
           </form>
         </div>
         <div class="col-md-8">
           <div class="page-action">
             <!-- show when multiple checked -->
-            <a class="btn btn-danger btn-sm" href="javascript:;" style="display: none">批量删除</a>
+            <a class="btn btn-danger btn-sm batch-del" href="javascript:;" style="display: none">批量删除</a>
           </div>
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th class="text-center" width="40"><input type="checkbox"></th>
+                <th class="text-center" width="40"><input type="checkbox" class="check-all"></th>
                 <th>文本</th>
                 <th>标题</th>
                 <th>链接</th>
@@ -50,16 +50,20 @@
               </tr>
             </thead>
             <tbody>
+              <script type="text/template" id="tbody-template">
+                {{ each navs }}
               <tr>
-                <td class="text-center"><input type="checkbox"></td>
-                <td><i class="fa fa-glass"></i>奇趣事</td>
-                <td>奇趣事</td>
-                <td>#</td>
+                <td class="text-center"><input type="checkbox" class="check-single"></td>
+                <td class="nav-key"><i class="{{ $value.icon }}"></i>{{ $value.text }}</td>
+                <td>{{ $value.title }}</td>
+                <td>{{ $value.link }}</td>
                 <td class="text-center">
-                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+                  <a href="javascript:;" class="btn btn-danger btn-xs nav-del">删除</a>
                 </td>
               </tr>
-              <tr>
+              {{ /each }}
+            </script>
+              <!-- <tr>
                 <td class="text-center"><input type="checkbox"></td>
                 <td><i class="fa fa-phone"></i>潮科技</td>
                 <td>潮科技</td>
@@ -76,7 +80,7 @@
                 <td class="text-center">
                   <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         </div>
@@ -85,5 +89,6 @@
   </div>
 
   <%- include('./layouts/admin_aside.ejs') %>
-
+<script src="../../assets/vendors/template/template.js"></script>
+<script src="../../assets/js/nav-menus.js"></script>
 <%- include('./layouts/admin_footer.ejs') %>
