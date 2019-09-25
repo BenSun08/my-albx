@@ -26,6 +26,9 @@ router.get('/', pagesController.getIndexPage)
       .post('/userLogin', userController.userLogin)
       .get('/userLogout', userController.userLogout)
       .get('/collectStatistic', userController.collectStatistic)
+      .get('/getAllUsers', userController.getAllUsers)
+      .post('/addNewUser', userController.addNewUser)
+      .get('/deleteUser', userController.deleteUser)
 
       //deal with posts
       .get('/getAllPosts', postsController.getAllPosts)

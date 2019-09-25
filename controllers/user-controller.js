@@ -99,5 +99,80 @@ module.exports={
                 })
             }
         })
+    },
+
+    /**
+     * @api {GET} /getAllUsers
+     * @apiName getAllUsers
+     */
+    getAllUsers(req, rsp){
+        userModel.getAllUsers((err, results)=>{
+            if(err){
+                rsp.send({
+                    code: 400,
+                    msg: 'Users loaded failed!',
+                    err: err.code
+                })
+            }else{
+                results.forEach(element=>{
+                    if(element.status == 'activated'){
+                        element.status = '已激活';
+                    }else{
+                        element.status = '未激活';
+                    }
+                })
+                rsp.send({
+                    code: 200,
+                    msg: 'Users loaded successfully!',
+                    data: results
+                })
+            }
+        })
+    },
+
+    /**
+     * @api {POST} /addNewUser
+     * @apiName addNweUser
+     */
+    addNewUser(req, rsp){
+        let newUser = req.body;
+        newUser.id = null;
+        newUser.status = 'held';
+        userModel.addNewUser(newUser, err=>{
+            if(err){
+                rsp.send({
+                    code: 400,
+                    msg: 'New user added failed!',
+                    err: err.code
+                })
+            }else{
+                rsp.send({
+                    code: 200,
+                    msg: 'New user added successfully!'
+                })
+            }
+        })
+    },
+
+    /**
+     * @api {GET} /deleteUser
+     * @apiName deleteUser
+     */
+    deleteUser(req, rsp){
+        userModel.deleteUserById(req.query.id, err=>{
+            if(err){
+                console.log(err);
+                rsp.send({
+                    code: 400,
+                    msg: 'User deleted failed!',
+                    err: err.code
+                })
+            }else{
+                rsp.send({
+                    code: 200,
+                    msg: 'User deleted successfully!'
+                })
+            }
+        })
     }
 }
