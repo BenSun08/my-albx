@@ -76,5 +76,20 @@ module.exports = {
         callback(null);
       }
     })
+  },
+
+  /**
+   * @api get statistic of categories
+   * @apiName getCategoriesCount
+   */
+  getCategoriesCount(callback){
+    let dml = `SELECT COUNT(id) AS categsNum FROM categories;`
+    connection.query(dml, (err, results)=>{
+      if(err){
+        callback(err);
+      }else{
+        callback(null, results[0]);
+      }
+    })
   }
 }

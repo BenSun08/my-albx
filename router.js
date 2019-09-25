@@ -22,9 +22,10 @@ router.get('/', pagesController.getIndexPage)
       .get('/admin/login', pagesController.getAdminLoginPage)
       .get('/admin/password-reset', pagesController.getAdminPwdResetPage)
 
-      //deal with the login and lgout process
+      //deal with user process like login, logout and statistics collection
       .post('/userLogin', userController.userLogin)
       .get('/userLogout', userController.userLogout)
+      .get('/collectStatistic', userController.collectStatistic)
 
       //deal with posts
       .get('/getAllPosts', postsController.getAllPosts)

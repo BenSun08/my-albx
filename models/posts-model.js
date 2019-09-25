@@ -149,5 +149,30 @@ module.exports = {
         });
       }
     });
+  },
+
+  /**
+   * @api get the statistic of posts
+   * @apiNmae getPostsStatistic
+   * @param {Function} callback
+   */
+  getPostsStatistic(callback){
+    let dml =`SELECT COUNT(id) AS posts_num, \`status\` FROM posts
+            GROUP BY \`status\`;`;
+    connection.query(dml, (err, results)=>{
+      if(err){
+        callback(err);
+      }else{
+        let draftedNum = 0;
+        let postsNum = 0;
+        results.forEach(element=>{
+          postsNum += element.posts_num;
+          if(element.status == 'drafted'){
+            draftedNum = element.posts_num;
+          }
+        })
+        callback(null, {postsNum, draftedNum});
+      }
+    })
   }
 };

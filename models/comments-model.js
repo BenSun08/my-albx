@@ -69,5 +69,29 @@ module.exports = {
                 callback(null);
             }
         })
+    },
+
+    /**
+     * @api get statistic of comments in database
+     * @apiName getCommentsStatistic
+     */
+    getCommentsStatistic(callback){
+        let dml = `SELECT COUNT(id) AS comments_num,\`status\`  FROM comments
+                    GROUP BY \`status\`;`;
+        connection.query(dml, (err, results)=>{
+            if(err){
+                callback(err);
+            }else{
+                let commentsNum = 0;
+                let heldNum = 0;
+                results.forEach(element=>{
+                    commentsNum += element.comments_num;
+                    if(element.status == 'held'){
+                        heldNum = element.comments_num;
+                    }
+                });
+                callback(null, {commentsNum,heldNum});
+            }
+        });
     }
 }

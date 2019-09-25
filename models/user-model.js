@@ -24,5 +24,5 @@ module.exports={
                 callback(null,results[0]);
             }
         })
-    }
+    },
 }
